@@ -1,0 +1,61 @@
+model:
+  - tabNTL
+network:
+  - tabNTL
+trainer:
+  - NTL
+device:
+  - cuda
+batch_size:
+  - 128
+learning_rate:
+  - 0.001
+training_epochs:
+  - 200
+latent_dim:
+  - 24
+enc_hdim:
+  - 24
+enc_nlayers:
+  - 5
+num_trans:
+  - 11
+trans_nlayers:
+  - 2
+trans_hdim:
+  - 24
+trans_type:
+  - residual
+loss:
+  - DCL
+trans_bias:
+  - False
+enc_bias:
+  - False
+batch_norm:
+  - False
+loss_temp:
+  - 0.1
+l2:
+  - 0.00001
+optimizer:
+  - Adam
+scheduler:
+  -
+    class: StepLR
+    args:
+      step_size: 200
+      gamma: 0.5
+early_stopper:
+  -
+    class: Patience
+    args:
+      patience: 100
+      use_loss: True
+
+shuffle:
+  - True
+num_repeat:
+  - 3
+result_folder:
+  - RESULTS/RESULTS_
