@@ -1,4 +1,19 @@
-import numpy as np
+# Neural Transformation Learning for Anomaly Detection (NeuTraLAD) - a self-supervised method for anomaly detection
+# Copyright (c) 2022 Robert Bosch GmbH
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 from torch.utils.data import Dataset
 
 class CustomDataset(Dataset):
@@ -14,23 +29,6 @@ class CustomDataset(Dataset):
         sample = self.samples[idx]
         data = {"sample": sample, "label": label}
         return data
-
-def norm_kdd_data( train_real, val_real, val_fake, cont_indices):
-    symb_indices = np.delete(np.arange(train_real.shape[1]), cont_indices)
-    mus = train_real[:, cont_indices].mean(0)
-    sds = train_real[:, cont_indices].std(0)
-    sds[sds == 0] = 1
-
-    def get_norm(xs, mu, sd):
-        bin_cols = xs[:, symb_indices]
-        cont_cols = xs[:, cont_indices]
-        cont_cols = np.array([(x - mu) / sd for x in cont_cols])
-        return np.concatenate([bin_cols, cont_cols], 1)
-
-    train_real = get_norm(train_real, mus, sds)
-    val_real = get_norm(val_real, mus, sds)
-    val_fake = get_norm(val_fake, mus, sds)
-    return train_real, val_real, val_fake
 
 def norm_data(data, mu=1):
     return 2 * (data / 255.) - mu

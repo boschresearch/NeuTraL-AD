@@ -1,3 +1,24 @@
+# Neural Transformation Learning for Anomaly Detection (NeuTraLAD) - a self-supervised method for anomaly detection
+# Copyright (c) 2022 Robert Bosch GmbH
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+# This source code is derived from A Fair Comparison of Graph Neural Networks for Graph Classification (ICLR 2020)
+#   (https://github.com/diningphil/gnn-comparison)
+# Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>,
+# licensed under GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007,
+# cf. 3rd-party-licenses.txt file in the root directory of this source tree.
+
 from pathlib import Path
 import json
 import yaml
