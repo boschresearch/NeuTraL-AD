@@ -41,3 +41,6 @@ class natops():
 class epilepsy():
     data_name = 'epilepsy'
     num_cls = 4
+class racket_sports():
+    data_name = "racket_sports"
+    num_cls =4

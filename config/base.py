@@ -45,6 +45,7 @@ class Config:
         'natops': natops,
         'epilepsy':epilepsy,
         'cifar10_feat': cifar10_feat,
+        'racket_sports':racket_sports
     }
 
     models = {

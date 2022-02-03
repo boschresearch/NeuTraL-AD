@@ -21,11 +21,11 @@ python Launch_Exps.py --config-file $1 --dataset-name $2
 
 config-file: 
 
-config_thyroid.yml; config_arrhy.yml; config_kdd.yml; config_kddrev.yml; config_arabic.yml; config_characters.yml; config_natops.yml; config_epilepsy.yml;
+config_thyroid.yml; config_arrhy.yml; config_kdd.yml; config_kddrev.yml; config_arabic.yml; config_characters.yml; config_natops.yml; config_epilepsy.yml; config_rs.yml
 
 dataset-name: 
 
-thyroid; arrhythmia; kdd; kddrev; arabic_digits; characters; natops; epilepsy;  
+thyroid; arrhythmia; kdd; kddrev; arabic_digits; characters; natops; epilepsy; racket_sports
 
 ## Datasets
 
