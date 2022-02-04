@@ -15,7 +15,7 @@
 #
 # This source code is derived from A Fair Comparison of Graph Neural Networks for Graph Classification (ICLR 2020)
 #   (https://github.com/diningphil/gnn-comparison)
-# Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>,
+# Copyright (C)  2020  University of Pisa,
 # licensed under GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007,
 # cf. 3rd-party-licenses.txt file in the root directory of this source tree.
 
