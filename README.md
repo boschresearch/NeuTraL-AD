@@ -13,7 +13,7 @@ part of the publication cited above. It will neither be maintained nor monitored
 
 ## How to use
 
-To run the experiment with NeuTraLAD on time series data and tabular data, please run the command and replace \$# with available options (see below): 
+To run the experiment with NeuTraLAD on time series data (one-vs-rest setting) and tabular data, please run the command and replace \$# with available options (see below): 
 
 ```
 python Launch_Exps.py --config-file $1 --dataset-name $2 
