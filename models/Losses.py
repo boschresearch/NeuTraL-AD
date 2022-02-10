@@ -45,7 +45,7 @@ class DCL(nn.Module):
             return score
 
         else:
-            loss = loss_tensor.sum(1).mean()
+            loss = loss_tensor.sum(1)
 
             return loss
 

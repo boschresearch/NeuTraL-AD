@@ -19,17 +19,21 @@ To run the experiment with NeuTraLAD on time series data (one-vs-rest setting) a
 python Launch_Exps.py --config-file $1 --dataset-name $2 
 ```
 
-config-file: 
+#####config-file: 
 
-config_thyroid.yml; config_arrhy.yml; config_kdd.yml; config_kddrev.yml; config_arabic.yml; config_characters.yml; config_natops.yml; config_epilepsy.yml; config_rs.yml
+config_thyroid.yml; config_arrhy.yml; config_kdd.yml; config_kddrev.yml; config_arabic.yml; config_characters.yml; config_natops.yml; config_epilepsy.yml;
 
-dataset-name: 
+#####dataset-name: 
 
-thyroid; arrhythmia; kdd; kddrev; arabic_digits; characters; natops; epilepsy; racket_sports
+thyroid; arrhythmia; kdd; kddrev; arabic_digits; characters; natops; epilepsy;  
 
 ## Datasets
 
-Tabular datasets are provided in the folder DATA. Time series datasets are modified on the UEA datasets from https://www.timeseriesclassification.com/
+Time series datasets are modified on the UEA datasets from https://www.timeseriesclassification.com/
+
+Arrhythmia and Thyroid datasets are taken from https://github.com/lironber/GOAD 
+
+KDD and KDDrev datasets can be downloaded from https://kdd.ics.uci.edu/databases/kddcup99/
 
 ## License
 

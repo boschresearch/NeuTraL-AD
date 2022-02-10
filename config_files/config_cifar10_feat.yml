@@ -9,13 +9,13 @@ device:
 batch_size:
   - 500
 learning_rate:
-  - 0.0004
+  - 0.0002
 training_epochs:
-  - 30
+  - 40
 enc_zdim:
   - 256
 enc_nlayers:
-  - 1
+  - 2
 num_trans:
   - 15
 trans_nlayers:
@@ -23,7 +23,7 @@ trans_nlayers:
 trans_hdim:
   - 2048
 trans_type:
-  - forward
+  - mul
 loss:
   - DCL
 enc_bias:
@@ -42,7 +42,7 @@ scheduler:
   -
     class: StepLR
     args:
-      step_size: 10
+      step_size: 20
       gamma: 0.5
 early_stopper:
   -

@@ -19,16 +19,16 @@ from .LoadTabular import *
 import torch
 
 
-def CIFAR10_feat(normal_class,root='/fs/scratch/rng_cr_bcai_dl/qic2rng/datasets/cifar10_features/'):
-    trainset = torch.load(root+'trainset_2048.pt')
+def CIFAR10_feat(path,normal_class):
+    trainset = torch.load(path+'trainset_2048.pt')
     train_data,train_targets = trainset
-    testset = torch.load(root+'testset_2048.pt')
+    testset = torch.load(path+'testset_2048.pt')
     test_data,test_targets = testset
     test_labels = np.ones_like(test_targets)
     test_labels[test_targets==normal_class]=0
     
     train_clean = train_data[train_targets==normal_class]
-    train_labels = np.zeros(train_data.shape[0])
+    train_labels = np.zeros(train_clean.shape[0])
 
     return train_clean,train_labels,test_data,test_labels
 
@@ -65,19 +65,19 @@ def split_in_out(train_label, test_label, cls, cls_type):
     return y_train, y_test
 
 def load_data(data_name,cls,cls_type):
-
+    path = 'DATA/'
     if data_name == 'thyroid':
-        train, train_label, test, test_label = Thyroid_train_valid_data()
+        train, train_label, test, test_label = Thyroid_train_test_split(path)
     elif data_name == 'arrhythmia':
-        train, train_label, test, test_label = Arrhythmia_train_valid_data()
+        train, train_label, test, test_label = Arrhythmia_train_test_split(path)
     elif data_name == 'kdd':
-        train, train_label, test, test_label = KDD99_train_valid_data()
+        train, train_label, test, test_label = KDD_train_test_split(path)
     elif data_name == 'kddrev':
-        train, train_label, test, test_label = KDD99Rev_train_valid_data()
+        train, train_label, test, test_label = KDDRev_train_test_split(path)
     elif data_name == 'cifar10_feat':
-        train, train_label, test, test_label = CIFAR10_feat(cls)
+        train, train_label, test, test_label = CIFAR10_feat(path,cls)
     else:
-        data_path = 'DATA/' + data_name + '/'
+        data_path = path + data_name + '/'
         train = np.load(data_path + 'train_array.npy')
         train_label = np.load(data_path + 'train_label.npy')
         test = np.load(data_path + 'test_array.npy')

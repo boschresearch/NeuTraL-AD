@@ -12,12 +12,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
-# This source code is derived from A Fair Comparison of Graph Neural Networks for Graph Classification (ICLR 2020)
-#   (https://github.com/diningphil/gnn-comparison)
-# Copyright (C)  2020  University of Pisa,
-# licensed under GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007,
-# cf. 3rd-party-licenses.txt file in the root directory of this source tree.
+
 
 import os
 import json
@@ -45,7 +40,7 @@ class KVariantEval:
         TS_aps = []
         TS_aucs = []
 
-        assessment_results = {}
+        results = {}
 
         for i in range(self.num_cls):
             try:
@@ -62,12 +57,12 @@ class KVariantEval:
                     TS_aucs.append(ts_auc)
                     TS_aps.append(ts_ap)
 
-                assessment_results['avg_TS_f1_' + str(i)] = ts_f1.mean()
-                assessment_results['std_TS_f1_' + str(i)] = ts_f1.std()
-                assessment_results['avg_TS_ap_' + str(i)] = ts_ap.mean()
-                assessment_results['std_TS_ap_' + str(i)] = ts_ap.std()
-                assessment_results['avg_TS_auc_' + str(i)] = ts_auc.mean()
-                assessment_results['std_TS_auc_' + str(i)] = ts_auc.std()
+                results['avg_TS_f1_' + str(i)] = ts_f1.mean()
+                results['std_TS_f1_' + str(i)] = ts_f1.std()
+                results['avg_TS_ap_' + str(i)] = ts_ap.mean()
+                results['std_TS_ap_' + str(i)] = ts_ap.std()
+                results['avg_TS_auc_' + str(i)] = ts_auc.mean()
+                results['std_TS_auc_' + str(i)] = ts_auc.std()
             except Exception as e:
                 print(e)
 
@@ -77,15 +72,15 @@ class KVariantEval:
         avg_TS_f1 = np.mean(TS_f1s, 0)
         avg_TS_ap = np.mean(TS_aps, 0)
         avg_TS_auc = np.mean(TS_aucs, 0)
-        assessment_results['avg_TS_f1_all'] = avg_TS_f1.mean()
-        assessment_results['std_TS_f1_all'] = avg_TS_f1.std()
-        assessment_results['avg_TS_ap_all'] = avg_TS_ap.mean()
-        assessment_results['std_TS_ap_all'] = avg_TS_ap.std()
-        assessment_results['avg_TS_auc_all'] = avg_TS_auc.mean()
-        assessment_results['std_TS_auc_all'] = avg_TS_auc.std()
+        results['avg_TS_f1_all'] = avg_TS_f1.mean()
+        results['std_TS_f1_all'] = avg_TS_f1.std()
+        results['avg_TS_ap_all'] = avg_TS_ap.mean()
+        results['std_TS_ap_all'] = avg_TS_ap.std()
+        results['avg_TS_auc_all'] = avg_TS_auc.mean()
+        results['std_TS_auc_all'] = avg_TS_auc.std()
 
         with open(os.path.join(self._NESTED_FOLDER, self._ASSESSMENT_FILENAME), 'w') as fp:
-            json.dump(assessment_results, fp)
+            json.dump(results, fp)
 
     def risk_assessment(self, experiment_class):
 

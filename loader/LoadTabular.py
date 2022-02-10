@@ -12,144 +12,105 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
-# This source code is derived from GOAD
-#   (https://github.com/lironber/GOAD)
+
 
 import pandas as pd
 from scipy import io
 import numpy as np
 
-def Thyroid_train_valid_data():
-    data = io.loadmat("DATA/thyroid.mat")
+def train_test_split(inliers,outliers):
+    num_split = len(inliers) // 2
+    train_data = inliers[:num_split]
+    train_label = np.zeros(num_split)
+    test_data = np.concatenate([inliers[num_split:],outliers],0)
+
+    test_label = np.zeros(test_data.shape[0])
+    test_label[num_split:]=1
+    return train_data, train_label, test_data, test_label
+
+def Thyroid_train_test_split(path):
+    data = io.loadmat(path+"thyroid.mat")
     samples = data['X']  # 3772
-    labels = ((data['y']).astype(np.int32)).reshape(-1)
+    labels = ((data['y']).astype(np.int)).reshape(-1)
 
-    norm_samples = samples[labels == 0]  # 3679 norm
-    anom_samples = samples[labels == 1]  # 93 anom
+    inliers = samples[labels == 0]  # 3679 norm
+    outliers = samples[labels == 1]  # 93 anom
 
-    n_train = len(norm_samples) // 2
-    train = norm_samples[:n_train]  # 1839 train
-    train_label = np.zeros(train.shape[0])
-    val_real = norm_samples[n_train:]
-    val_fake = anom_samples
-    val = np.concatenate([val_real,val_fake],0)
+    train_data, train_label, test_data, test_label=train_test_split(inliers,outliers)
+    return train_data, train_label, test_data, test_label
 
-    val_label = np.zeros(val.shape[0])
-    val_label[val_real.shape[0]:]=1
-
-    return train,train_label,val,val_label
-
-def Arrhythmia_train_valid_data():
-    data = io.loadmat("DATA/arrhythmia.mat")
+def Arrhythmia_train_test_split(path):
+    data = io.loadmat(path+"arrhythmia.mat")
     samples = data['X']  # 518
-    labels = ((data['y']).astype(np.int32)).reshape(-1)
+    labels = ((data['y']).astype(np.int)).reshape(-1)
 
-    norm_samples = samples[labels == 0]  # 452 norm
-    anom_samples = samples[labels == 1]  # 66 anom
+    inliers = samples[labels == 0]  # 452 norm
+    outliers = samples[labels == 1]  # 66 anom
 
-    n_train = len(norm_samples) // 2
-    train = norm_samples[:n_train]  # 226 train
-    train_label = np.zeros(train.shape[0])
-    val_real = norm_samples[n_train:]
-    val_fake = anom_samples
-    val = np.concatenate([val_real,val_fake],0)
-
-    val_label = np.zeros(val.shape[0])
-    val_label[val_real.shape[0]:]=1
-
-    return train,train_label,val,val_label
+    train_data, train_label, test_data, test_label=train_test_split(inliers,outliers)
+    return train_data, train_label, test_data, test_label
 
 
 
-def KDD99_train_valid_data():
-    samples, labels, cont_indices = KDD99_preprocessing()
-    anom_samples = samples[labels == 1]  # norm: 97278
+def KDD_train_test_split(path):
+    samples, labels, continual_idx = KDD_preprocessing(path)
+    inliers = samples[labels == 0]  # attack: 396743
+    outliers = samples[labels == 1]  # norm: 97278
+    idx_perm = np.random.permutation(inliers.shape[0])
+    inliers = inliers[idx_perm]
 
-    norm_samples = samples[labels == 0]  # attack: 396743
+    train_data, train_label, test_data, test_label = train_test_split(inliers, outliers)
+    train_data, test_data= norm_kdd_data(train_data, test_data, continual_idx)
 
-    n_norm = norm_samples.shape[0]
-    ranidx = np.random.permutation(n_norm)
-    n_train = n_norm // 2
-
-    x_train = norm_samples[ranidx[:n_train]]
-    norm_test = norm_samples[ranidx[n_train:]]
-
-    val_real = norm_test
-    val_fake = anom_samples
-    train,val_real,val_fake= norm_kdd_data(x_train, val_real, val_fake, cont_indices)
-    train_label = np.zeros(train.shape[0])
-    val = np.concatenate([val_real,val_fake],0)
-    val_label = np.zeros(val.shape[0])
-    val_label[val_real.shape[0]:]=1
-
-    return train,train_label,val,val_label
+    return train_data, train_label, test_data, test_label
 
 
-def KDD99Rev_train_valid_data():
-    samples, labels, cont_indices = KDD99_preprocessing()
+def KDDRev_train_test_split(path):
+    samples, labels, continual_idx = KDD_preprocessing(path)
 
-    norm_samples = samples[labels == 1]  # norm: 97278
+    inliers = samples[labels == 1]  # norm: 97278
+    outliers = samples[labels == 0]  # attack: 396743
 
-    # Randomly draw samples labeled as 'attack'
-    # so that the ratio btw norm:attack will be 4:1
-    # len(anom) = 24,319
-    anom_samples = samples[labels == 0]  # attack: 396743
+    random_cut = np.random.permutation(len(outliers))[:24319]
+    outliers = outliers[random_cut]  # attack:24319
 
-    rp = np.random.permutation(len(anom_samples))
-    rp_cut = rp[:24319]
-    anom_samples = anom_samples[rp_cut]  # attack:24319
+    idx_perm = np.random.permutation(inliers.shape[0])
+    inliers = inliers[idx_perm]
 
-    n_norm = norm_samples.shape[0]
-    ranidx = np.random.permutation(n_norm)
-    n_train = n_norm // 2
+    train_data, train_label, test_data, test_label = train_test_split(inliers, outliers)
+    train_data, test_data= norm_kdd_data(train_data, test_data, continual_idx)
 
-    x_train = norm_samples[ranidx[:n_train]]
-    norm_test = norm_samples[ranidx[n_train:]]
+    return train_data, train_label, test_data, test_label
 
-    val_real = norm_test
-    val_fake = anom_samples
-    train,val_real,val_fake= norm_kdd_data(x_train, val_real, val_fake, cont_indices)
-    train_label = np.zeros(train.shape[0])
-    val = np.concatenate([val_real,val_fake],0)
-    val_label = np.zeros(val.shape[0])
-    val_label[val_real.shape[0]:]=1
 
-    return train,train_label,val,val_label
+def KDD_preprocessing(path):
+    file_names = [path+"kddcup.data_10_percent.gz",path+"kddcup.names"]
 
-def KDD99_preprocessing():
-    urls = [
-    "DATA/kddcup.data_10_percent.gz",
-    "DATA/kddcup.names"
-    ]
-    df_colnames = pd.read_csv(urls[1], skiprows=1, sep=':', names=['f_names', 'f_types'])
-    df_colnames.loc[df_colnames.shape[0]] = ['status', ' symbolic.']
-    df = pd.read_csv(urls[0], header=None, names=df_colnames['f_names'].values)
-    df_symbolic = df_colnames[df_colnames['f_types'].str.contains('symbolic.')]
-    df_continuous = df_colnames[df_colnames['f_types'].str.contains('continuous.')]
-    samples = pd.get_dummies(df.iloc[:, :-1], columns=df_symbolic['f_names'][:-1])
+    column_name = pd.read_csv(file_names[1], skiprows=1, sep=':', names=['f_names', 'f_types'])
+    column_name.loc[column_name.shape[0]] = ['status', ' symbolic.']
+    data = pd.read_csv(file_names[0], header=None, names=column_name['f_names'].values)
+    data_symbolic = column_name[column_name['f_types'].str.contains('symbolic.')]
+    data_continuous = column_name[column_name['f_types'].str.contains('continuous.')]
+    samples = pd.get_dummies(data.iloc[:, :-1], columns=data_symbolic['f_names'][:-1])
 
-    smp_keys = samples.keys()
-    cont_indices = []
-    for cont in df_continuous['f_names']:
-        cont_indices.append(smp_keys.get_loc(cont))
+    sample_keys = samples.keys()
+    continuous_idx = []
+    for cont_idx in data_continuous['f_names']:
+        continuous_idx.append(sample_keys.get_loc(cont_idx))
 
-    labels = np.where(df['status'] == 'normal.', 1, 0)
-    return np.array(samples), np.array(labels), cont_indices
+    labels = np.where(data['status'] == 'normal.', 1, 0)
+    return np.array(samples), np.array(labels), continuous_idx
 
-def norm_kdd_data( train_real, val_real, val_fake, cont_indices):
-    symb_indices = np.delete(np.arange(train_real.shape[1]), cont_indices)
-    mus = train_real[:, cont_indices].mean(0)
-    sds = train_real[:, cont_indices].std(0)
-    sds[sds == 0] = 1
 
-    def get_norm(xs, mu, sd):
-        bin_cols = xs[:, symb_indices]
-        cont_cols = xs[:, cont_indices]
-        cont_cols = np.array([(x - mu) / sd for x in cont_cols])
-        return np.concatenate([bin_cols, cont_cols], 1)
+def norm_kdd_data(train_data, test_data, continuous_idx):
+    symbolic_idx = np.delete(np.arange(train_data.shape[1]), continuous_idx)
+    mu = np.mean(train_data[:, continuous_idx],0,keepdims=True)
+    std = np.std(train_data[:, continuous_idx],0,keepdims=True)
+    std[std == 0] = 1
 
-    train_real = get_norm(train_real, mus, sds)
-    val_real = get_norm(val_real, mus, sds)
-    val_fake = get_norm(val_fake, mus, sds)
-    return train_real, val_real, val_fake
+    train_continual = (train_data[:, continuous_idx]-mu)/std
+    train_normalized = np.concatenate([train_data[:, symbolic_idx], train_continual], 1)
+    test_continual = (test_data[:, continuous_idx]-mu)/std
+    test_normalized = np.concatenate([test_data[:, symbolic_idx], test_continual], 1)
+
+    return train_normalized, test_normalized

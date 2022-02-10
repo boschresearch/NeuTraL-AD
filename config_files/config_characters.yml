@@ -23,7 +23,7 @@ num_trans:
 trans_nlayers:
   - 5
 trans_type:
-  - residual
+  - mul
 loss:
   - DCL
 enc_bias:

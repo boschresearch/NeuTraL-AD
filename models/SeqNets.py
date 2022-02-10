@@ -54,19 +54,19 @@ class ConvLayer(nn.Module):
 
 
 class SeqTransformNet(nn.Module):
-    def __init__(self, x_dim,bias,num_layers):
+    def __init__(self, x_dim,hdim,bias,num_layers):
         super(SeqTransformNet, self).__init__()
         self.relu = nn.ReLU()
         self.tanh = nn.Tanh()
-        self.conv1 = ConvLayer(x_dim, x_dim, 3, 1,bias=bias)
+        self.conv1 = ConvLayer(x_dim, hdim, 3, 1,bias=bias)
         #        self.conv1 = nn.Conv1d(args.x_dim,2*args.x_dim,3,1,0,dilation=2**i)
-        self.in1 = nn.InstanceNorm1d(x_dim, affine=False)
+        self.in1 = nn.InstanceNorm1d(hdim, affine=False)
         res_blocks = []
         for _ in range(num_layers-2):
-            res_blocks.append(res_trans1d_block(x_dim,bias))
+            res_blocks.append(res_trans1d_block(hdim,bias))
         self.res = nn.Sequential(*res_blocks)
         #        self.conv2 = nn.ConvTranspose1d(args.x_dim,2*args.x_dim,3,1,0,dilation=2**i)
-        self.conv2 = ConvLayer(x_dim, x_dim, 3, 1,bias=bias)
+        self.conv2 = ConvLayer(hdim, x_dim, 3, 1,bias=bias)
 
     def forward(self, x):
         out = self.relu(self.in1(self.conv1(x)))
@@ -139,8 +139,9 @@ class SeqEncoder(nn.Module):
         in_dim = h_dim
         window_size = x_len
         for i in range(num_layers - 2):
-            enc.append(self._make_layer(in_dim,h_dim*2**i,(3,2,1)))
-            in_dim = h_dim*2**i
+            out_dim = h_dim*2**i
+            enc.append(self._make_layer(in_dim,out_dim,(3,2,1)))
+            in_dim =out_dim
             window_size = np.floor((window_size+2-3)/2)+1
 
 
@@ -181,6 +182,6 @@ class SeqNets():
         enc = nn.ModuleList(
             [SeqEncoder(x_dim,x_len, enc_hdim, z_dim, config['enc_bias'],enc_nlayers,batch_norm) for _ in range(num_trans+1)])
         trans = nn.ModuleList(
-            [SeqTransformNet(x_dim, config['trans_bias'], trans_nlayers) for _ in range(num_trans)])
+            [SeqTransformNet(x_dim, x_dim,config['trans_bias'], trans_nlayers) for _ in range(num_trans)])
 
         return enc,trans

@@ -38,8 +38,9 @@ class NeutralAD_trainer:
             z = self.model(samples)
 
             loss = self.loss_fun(z)
+            loss_mean = loss.mean()
             optimizer.zero_grad()
-            loss.backward()
+            loss_mean.backward()
             optimizer.step()
 
             loss_all += loss.sum()
@@ -80,7 +81,7 @@ class NeutralAD_trainer:
 
 
     def train(self, train_loader,max_epochs=100, optimizer=None, scheduler=None,
-              validation_loader=None, test_loader=None, early_stopping=None, logger=None, log_every=1):
+              validation_loader=None, test_loader=None, early_stopping=None, logger=None, log_every=2):
 
         early_stopper = early_stopping() if early_stopping is not None else None
 

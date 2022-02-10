@@ -13,23 +13,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# This source code is derived from A Fair Comparison of Graph Neural Networks for Graph Classification (ICLR 2020)
-#   (https://github.com/diningphil/gnn-comparison)
-# Copyright (C)  2020  University of Pisa,
-# licensed under GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007,
-# cf. 3rd-party-licenses.txt file in the root directory of this source tree.
 
 import argparse
 from config.base import Grid, Config
 from evaluation.Experiments import runExperiment
 from evaluation.Kvariants_Eval import KVariantEval
-from torch.backends import cudnn
-cudnn.benchmark = True
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config-file', dest='config_file', default='config_kdd.yml')
-    parser.add_argument('--dataset-name', dest='dataset_name', default='kdd')
+    parser.add_argument('--config-file', dest='config_file', default='config_kddrev.yml')
+    parser.add_argument('--dataset-name', dest='dataset_name', default='kddrev')
     return parser.parse_args()
 
 def EndtoEnd_Experiments(config_file, dataset_name):
