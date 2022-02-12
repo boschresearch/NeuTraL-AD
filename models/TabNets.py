@@ -20,16 +20,16 @@ import torch.nn.init as init
 
 
 class TabTransformNet(nn.Module):
-    def __init__(self, x_dim,h_dim,bias,num_layers):
+    def __init__(self, x_dim,h_dim,num_layers):
         super(TabTransformNet, self).__init__()
         net = []
         input_dim = x_dim
         for _ in range(num_layers-1):
-            net.append(nn.Linear(input_dim,h_dim,bias=bias))
+            net.append(nn.Linear(input_dim,h_dim,bias=False))
             # net.append(nn.BatchNorm1d(h_dim,affine=bias))
             net.append(nn.ReLU())
             input_dim= h_dim
-        net.append(nn.Linear(input_dim,x_dim,bias=bias))
+        net.append(nn.Linear(input_dim,x_dim,bias=False))
 
         self.net = nn.Sequential(*net)
 
@@ -90,7 +90,7 @@ class TabNets():
 
         enc = TabEncoder(x_dim, hdim,zdim, config['enc_bias'],enc_nlayers,batch_norm)
         trans = nn.ModuleList(
-            [TabTransformNet(x_dim, trans_hdim, config['trans_bias'], trans_nlayers) for _ in range(num_trans)])
+            [TabTransformNet(x_dim, trans_hdim, trans_nlayers) for _ in range(num_trans)])
 
 
         return enc,trans

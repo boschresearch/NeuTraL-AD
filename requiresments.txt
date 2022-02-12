@@ -3,4 +3,17 @@ numpy
 scikit-learn
 scipy
 torch
+torchvision
 pyyaml
+
+# Text AD Exps
+pytorch-nlp==0.4.1
+nltk
+spacy
+
+# Graph AD exps
+torch-scatter==2.0.7
+torch-sparse==0.6.9
+torch-cluster==1.5.9
+torch-spline-conv==1.2.1
+torch-geometric==1.7.0

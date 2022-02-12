@@ -17,9 +17,10 @@
 from .utils import *
 from .LoadTabular import *
 import torch
+import torchvision.datasets as dataset
+from .LoadReuters import Reuters_Dataset
 
-
-def CIFAR10_feat(path,normal_class):
+def CIFAR10_feat(normal_class,path):
     trainset = torch.load(path+'trainset_2048.pt')
     train_data,train_targets = trainset
     testset = torch.load(path+'testset_2048.pt')
@@ -28,6 +29,26 @@ def CIFAR10_feat(path,normal_class):
     test_labels[test_targets==normal_class]=0
     
     train_clean = train_data[train_targets==normal_class]
+    train_labels = np.zeros(train_clean.shape[0])
+
+    return train_clean,train_labels,test_data,test_labels
+
+def FMNIST_Dataset(normal_class,path):
+    trainset = dataset.FashionMNIST(path, train=True, download=True)
+    train_data = np.array(trainset.data)
+    train_targets = np.array(trainset.targets)
+
+    testset = dataset.FashionMNIST(path, train=False, download=True)
+    test_data = np.array(testset.data)
+    test_targets = np.array(testset.targets)
+    test_labels = np.ones_like(test_targets)
+    test_labels[test_targets==normal_class]=0
+    train_clean = train_data[np.where(train_targets == normal_class)]
+
+    train_clean = norm_data(np.asarray(train_clean, dtype='float32'))
+    test_data = norm_data(np.asarray(test_data, dtype='float32'))
+    train_clean = train_clean[:,np.newaxis]
+    test_data = test_data[:,np.newaxis]
     train_labels = np.zeros(train_clean.shape[0])
 
     return train_clean,train_labels,test_data,test_labels
@@ -66,6 +87,7 @@ def split_in_out(train_label, test_label, cls, cls_type):
 
 def load_data(data_name,cls,cls_type):
     path = 'DATA/'
+    data_path = path + data_name + '/'
     if data_name == 'thyroid':
         train, train_label, test, test_label = Thyroid_train_test_split(path)
     elif data_name == 'arrhythmia':
@@ -75,7 +97,12 @@ def load_data(data_name,cls,cls_type):
     elif data_name == 'kddrev':
         train, train_label, test, test_label = KDDRev_train_test_split(path)
     elif data_name == 'cifar10_feat':
-        train, train_label, test, test_label = CIFAR10_feat(path,cls)
+        train, train_label, test, test_label = CIFAR10_feat(cls,data_path)
+    elif data_name == 'fmnist':
+        train, train_label, test, test_label = FMNIST_Dataset(cls,data_path)
+    elif data_name == 'reuters':
+        dataset = Reuters_Dataset(cls,data_path)
+        return dataset
     else:
         data_path = path + data_name + '/'
         train = np.load(data_path + 'train_array.npy')
@@ -90,5 +117,5 @@ def load_data(data_name,cls,cls_type):
 
     trainset = CustomDataset(train,train_label)
     testset = CustomDataset(test,test_label)
-    return trainset,testset,testset
+    return [trainset,testset,testset]
 

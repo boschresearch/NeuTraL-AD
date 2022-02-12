@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+
+# tabular datasets
 class Thyroid():
     data_name = "thyroid"
     num_cls =1
@@ -26,9 +28,8 @@ class KDD():
 class KDDrev():
     data_name = "kddrev"
     num_cls =1
-class cifar10_feat():
-    data_name = "cifar10_feat"
-    num_cls =10
+
+# time series datasets
 class arabic_digits():
     data_name = "arabic_digits"
     num_cls =10
@@ -44,3 +45,37 @@ class epilepsy():
 class racket_sports():
     data_name = "racket_sports"
     num_cls =4
+
+# image datasets
+class fmnist():
+    data_name = "fmnist"
+    num_cls =10
+class cifar10_feat():
+    data_name = "cifar10_feat"
+    num_cls =10
+
+# text dataset
+class reuters():
+    data_name = "reuters"
+    num_cls =7
+
+# graph datasets
+from loader.GraphDataClass import TUDatasetManager
+class NCI1(TUDatasetManager):
+    data_name = "NCI1"
+    num_cls = 2
+class Mutagenicity(TUDatasetManager):
+    data_name = "Mutagenicity"
+    num_cls = 2
+class RedditBinary(TUDatasetManager):
+    data_name = "REDDIT-BINARY"
+    num_cls = 2
+class Proteins(TUDatasetManager):
+    data_name = "PROTEINS"
+    num_cls = 2
+class DD(TUDatasetManager):
+    data_name = "DD"
+    num_cls = 2
+class IMDBBinary(TUDatasetManager):
+    data_name = "IMDB-BINARY"
+    num_cls = 2

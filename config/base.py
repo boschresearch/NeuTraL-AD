@@ -29,7 +29,9 @@ from utils import read_config_file
 from models.TabNets import TabNets
 from models.SeqNets import SeqNets
 from models.FeatNets import FeatNets
-from models.NeutralAD import SeqNeutralAD,TabNeutralAD,FeatNeutralAD
+from models.VisNets import VisNets
+from models.TextNets import TextNets
+from models.NeutralAD import SeqNeutralAD,TabNeutralAD,FeatNeutralAD,VisNeutralAD,TextNeutralAD,GraphNeutralAD
 from models.NeutralAD_trainer import NeutralAD_trainer
 class Config:
     """
@@ -45,13 +47,24 @@ class Config:
         'natops': natops,
         'epilepsy':epilepsy,
         'cifar10_feat': cifar10_feat,
-        'racket_sports':racket_sports
+        'racket_sports':racket_sports,
+        'fmnist':fmnist,
+        'reuters':reuters,
+        'proteins': Proteins,
+        'nci1': NCI1,
+        'dd': DD,
+        'imdb': IMDBBinary,
+        'reddit': RedditBinary,
+        'Mutag': Mutagenicity,
     }
 
     models = {
         'seqNTL': SeqNeutralAD,
         'tabNTL':TabNeutralAD,
         'featNTL':FeatNeutralAD,
+        'visNTL':VisNeutralAD,
+        'textNTL':TextNeutralAD,
+        'GraphNTL':GraphNeutralAD
     }
 
     trainers = {
@@ -62,10 +75,13 @@ class Config:
         'tabNTL': TabNets,
         'seqNTL':SeqNets,
         'featNTL': FeatNets,
+        'visNTL':VisNets,
+        'textNTL': TextNets
     }
 
     losses = {
         'DCL': DCL,
+        'EucDCL':EucDCL
     }
     optimizers = {
         'Adam': Adam,

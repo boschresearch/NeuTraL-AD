@@ -27,7 +27,7 @@ class CustomDataset(Dataset):
     def __getitem__(self, idx):
         label = self.labels[idx]
         sample = self.samples[idx]
-        data = {"sample": sample, "label": label}
+        data = [sample, label]
         return data
 
 def norm_data(data, mu=1):

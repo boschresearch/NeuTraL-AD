@@ -124,8 +124,8 @@ class KVariantEval:
             torch.manual_seed(i + 41)
             torch.cuda.manual_seed(i + 41)
             torch.cuda.manual_seed_all(i + 41)
-            trainset, valset, testset = load_data(self.data_name, cls, cls_type)
-            val_auc, test_auc, test_ap,test_f1 = experiment.run_test(trainset,valset,testset,logger)
+            dataset = load_data(self.data_name, cls, cls_type)
+            val_auc, test_auc, test_ap,test_f1 = experiment.run_test(dataset,logger)
             print(f'Final training run {i + 1}: {val_auc}, {test_auc,test_ap, test_f1}')
 
             val_auc_list.append(val_auc)

@@ -1,37 +1,37 @@
 model:
-  - seqNTL
+  - textNTL
 trainer:
   - NTL
 network:
-  - seqNTL
+  - textNTL
 device:
   - cuda
-x_length:
-  - 206
-learning_rate:
-  - 0.001
-training_epochs:
-  - 100
-latent_dim:
+batch_size:
   - 128
+learning_rate:
+  - 0.0005
+training_epochs:
+  - 50
+latent_dim:
+  - 300
 enc_hdim:
-  - 32
-enc_nlayers:
-  - 8
+  - 100
 num_trans:
-  - 11
+  - 10
 trans_nlayers:
-  - 5
+  - 3
+trans_hdim:
+  - 300
 trans_type:
-  - residual
+  - mul
+pretrained_model:
+  - GloVe_6B
 loss:
   - DCL
 enc_bias:
   - False
-batch_norm:
-  - False
 loss_temp:
-  - 0.2
+  - 0.1
 l2:
   - 0.00001
 optimizer:
@@ -40,13 +40,13 @@ scheduler:
   -
     class: StepLR
     args:
-      step_size: 100
+      step_size: 50
       gamma: 0.5
 early_stopper:
   -
     class: Patience
     args:
-      patience: 100
+      patience: 50
       use_train_loss: True
 
 shuffle:

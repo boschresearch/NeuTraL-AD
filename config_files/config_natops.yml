@@ -28,8 +28,6 @@ loss:
   - DCL
 enc_bias:
   - False
-trans_bias:
-  - False
 batch_norm:
   - False
 loss_temp:
@@ -49,7 +47,7 @@ early_stopper:
     class: Patience
     args:
       patience: 100
-      use_loss: True
+      use_train_loss: True
 
 shuffle:
   - True

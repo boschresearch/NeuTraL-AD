@@ -1,29 +1,29 @@
 model:
-  - seqNTL
+  - visNTL
 trainer:
   - NTL
 network:
-  - seqNTL
+  - visNTL
 device:
   - cuda
-x_length:
-  - 206
+batch_size:
+  - 512
 learning_rate:
   - 0.001
 training_epochs:
-  - 100
-latent_dim:
-  - 128
+  - 20
 enc_hdim:
-  - 32
+  - 16
+enc_zdim:
+  - 64
 enc_nlayers:
-  - 8
+  - 2
 num_trans:
-  - 11
+  - 15
 trans_nlayers:
-  - 5
+  - 1
 trans_type:
-  - residual
+  - mul
 loss:
   - DCL
 enc_bias:
@@ -31,27 +31,28 @@ enc_bias:
 batch_norm:
   - False
 loss_temp:
-  - 0.2
+  - 0.1
 l2:
-  - 0.00001
+  - 0.
 optimizer:
   - Adam
 scheduler:
   -
     class: StepLR
     args:
-      step_size: 100
+      step_size: 10
       gamma: 0.5
 early_stopper:
   -
     class: Patience
     args:
-      patience: 100
+      patience: 10
       use_train_loss: True
 
 shuffle:
   - True
+
 num_repeat:
-  - 1
+  - 3
 result_folder:
   - RESULTS/RESULTS_

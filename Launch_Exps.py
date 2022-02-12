@@ -16,13 +16,14 @@
 
 import argparse
 from config.base import Grid, Config
-from evaluation.Experiments import runExperiment
+from evaluation.Experiments import runExperiment,runTextExperiment,runGraphExperiment
 from evaluation.Kvariants_Eval import KVariantEval
+from evaluation.Kfolds_Eval import KFoldEval
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config-file', dest='config_file', default='config_kddrev.yml')
-    parser.add_argument('--dataset-name', dest='dataset_name', default='kddrev')
+    parser.add_argument('--config-file', dest='config_file', default='config_cifar10_feat.yml')
+    parser.add_argument('--dataset-name', dest='dataset_name', default='cifar10_feat')
     return parser.parse_args()
 
 def EndtoEnd_Experiments(config_file, dataset_name):
@@ -32,9 +33,17 @@ def EndtoEnd_Experiments(config_file, dataset_name):
     dataset =model_configuration.dataset
     result_folder = model_configuration.result_folder+model_configuration.exp_name
 
-    risk_assesser = KVariantEval(dataset, result_folder, model_configurations)
+    if dataset_name in ['dd','proteins','nci1','mutag','imdb','reddit']:
+        exp_class = runGraphExperiment
+        risk_assesser = KFoldEval(dataset,result_folder,model_configurations)
+    else:
+        if dataset_name == 'reuters':
+            exp_class = runTextExperiment
+        else:
+            exp_class = runExperiment
+        risk_assesser = KVariantEval(dataset, result_folder, model_configurations)
 
-    risk_assesser.risk_assessment(runExperiment)
+    risk_assesser.risk_assessment(exp_class)
 
 if __name__ == "__main__":
     args = get_args()

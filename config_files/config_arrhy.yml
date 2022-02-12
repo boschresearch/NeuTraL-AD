@@ -28,8 +28,6 @@ trans_type:
   - residual
 loss:
   - DCL
-trans_bias:
-  - False
 enc_bias:
   - False
 batch_norm:
@@ -51,7 +49,7 @@ early_stopper:
     class: Patience
     args:
       patience: 100
-      use_loss: True
+      use_train_loss: True
 
 shuffle:
   - True

@@ -1,39 +1,33 @@
 model:
-  - seqNTL
+  - GraphNTL
 trainer:
   - NTL
-network:
-  - seqNTL
 device:
   - cuda
-x_length:
-  - 206
+batch_size:
+  - 128
 learning_rate:
   - 0.001
 training_epochs:
-  - 100
-latent_dim:
-  - 128
-enc_hdim:
+  - 500
+hidden_dim:
   - 32
-enc_nlayers:
-  - 8
 num_trans:
-  - 11
-trans_nlayers:
-  - 5
-trans_type:
-  - residual
+  - 6
+num_layers:
+  - 4
+norm_layer:
+  - gn
+bias:
+  - False
 loss:
-  - DCL
-enc_bias:
-  - False
-batch_norm:
-  - False
+  - EucDCL
 loss_temp:
-  - 0.2
+  - 1
 l2:
-  - 0.00001
+  - 0.0001
+aggregation:
+  - add
 optimizer:
   - Adam
 scheduler:
@@ -47,7 +41,7 @@ early_stopper:
     class: Patience
     args:
       patience: 100
-      use_train_loss: True
+      use_train_loss: False
 
 shuffle:
   - True
