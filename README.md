@@ -23,31 +23,34 @@ python Launch_Exps.py --config-file $1 --dataset-name $2
 
 **config-file:** 
 
-> Tabular Data: config_thyroid.yml; config_arrhy.yml; config_kdd.yml; config_kddrev.yml;
+* Tabular Data: config_thyroid.yml; config_arrhy.yml; config_kdd.yml; config_kddrev.yml;
 
-> Time Series: config_arabic.yml; config_characters.yml; config_natops.yml; config_epilepsy.yml; config_rs.yml;
+* Time Series: config_arabic.yml; config_characters.yml; config_natops.yml; config_epilepsy.yml; config_rs.yml;
 
-> Image Data: config_fmnist.yml; config_cifar10_feat.yml; 
+* Image Data: config_fmnist.yml; config_cifar10_feat.yml; 
 
-> Text Data: config_reuters.yml;
+* Text Data: config_reuters.yml;
 
-> Graph Data: config_bio.yml; config_molecule.yml; config_social.yml;
+* Graph Data: config_bio.yml; config_molecule.yml; config_social.yml;
+
 
 **dataset-name:** 
 
-> Tabular Data: thyroid; arrhythmia; kdd; kddrev;
+* Tabular Data: thyroid; arrhythmia; kdd; kddrev;
 
-> Time Series: arabic_digits; characters; natops; epilepsy; racket_sports;
+* Time Series: arabic_digits; characters; natops; epilepsy; racket_sports;
 
-> Image Data: fmnist; cifar10_feat; 
+* Image Data: fmnist; cifar10_feat; 
 
-> Text Data: reuters;
+* Text Data: reuters;
 
-> Graph Data: dd; thyroid; nci1; mutag; imdb; reddit;
+* Graph Data: dd; thyroid; nci1; mutag; imdb; reddit;
 
 ## How to Use
 1. When using your own data, please put your data files under [DATA](DATA).
+
 2. Create a config file which contains your hyper-parameters under [config_files](config_files).  
+
 3. Add your data loader to the function ''load_data'' in the [loader/LoadData.py](loader/LoadData.py).
 * For time series data, the shape is (batch size, #channels, sequence length).
 * For image data, the shape is (batch size, #channels, height, width).
