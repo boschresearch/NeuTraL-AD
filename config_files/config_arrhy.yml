@@ -55,5 +55,7 @@ shuffle:
   - True
 num_repeat:
   - 3
+save_scores:
+  - False
 result_folder:
   - RESULTS/RESULTS_

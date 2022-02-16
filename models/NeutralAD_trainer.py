@@ -48,7 +48,6 @@ class NeutralAD_trainer:
 
             loss_all += loss.sum()
 
-
         return loss_all.item()/len(train_loader.dataset)
 
 
@@ -82,7 +81,7 @@ class NeutralAD_trainer:
         auc = roc_auc_score(target_all, score_all)
         f1 = compute_pre_recall_f1(target_all,score_all)
         ap = average_precision_score(target_all, score_all)
-        return auc, ap,f1,loss_in.item() / (target_all == 0).sum(), loss_out.item() / (target_all == 1).sum()
+        return auc, ap,f1,loss_in.item() / (target_all == 0).sum(), loss_out.item() / (target_all == 1).sum(),score_all,target_all
 
 
     def train(self, train_loader,cls = None,max_epochs=100, optimizer=None, scheduler=None,
@@ -91,10 +90,10 @@ class NeutralAD_trainer:
         early_stopper = early_stopping() if early_stopping is not None else None
 
         val_auc, val_f1, = -1, -1
-        test_auc, test_f1, test_score = None, None,None,
+        test_auc, test_f1, test_score = None, None,None
+        score,target = None,None
 
         time_per_epoch = []
-
 
         for epoch in range(1, max_epochs+1):
 
@@ -107,15 +106,14 @@ class NeutralAD_trainer:
                 scheduler.step()
 
             if test_loader is not None:
-                test_auc, test_ap,test_f1, testin_loss,testout_loss = self.detect_outliers(test_loader,cls)
+                test_auc, test_ap,test_f1, testin_loss,testout_loss,score,target = self.detect_outliers(test_loader,cls)
 
             if validation_loader is not None:
-                val_auc, val_ap,val_f1, valin_loss,valout_loss = self.detect_outliers(validation_loader,cls)
+                val_auc, val_ap,val_f1, valin_loss,valout_loss,_,_ = self.detect_outliers(validation_loader,cls)
                 if epoch>5:
                     if early_stopper is not None and early_stopper.stop(epoch, valin_loss, val_auc, testin_loss, test_auc, test_ap,test_f1,
-                                                                        train_loss):
+                                                                        train_loss,score,target):
                         break
-
 
             if epoch % log_every == 0 or epoch == 1:
                 msg = f'Epoch: {epoch}, TR loss: {train_loss}, VAL loss: {valin_loss,valout_loss}, VL auc: {val_auc} VL ap: {val_ap} VL f1: {val_f1} '
@@ -127,7 +125,7 @@ class NeutralAD_trainer:
                     print(msg)
 
         if early_stopper is not None:
-            train_loss, val_loss, val_auc, test_loss, test_auc, test_ap, test_f1, best_epoch \
+            train_loss, val_loss, val_auc, test_loss, test_auc, test_ap, test_f1, best_epoch,score,target \
                 = early_stopper.get_best_vl_metrics()
             msg = f'Stopping at epoch {best_epoch}, TR loss: {train_loss}, VAL loss: {val_loss}, VAL auc: {val_auc} ,' \
                 f'TS loss: {test_loss}, TS auc: {test_auc} TS ap: {test_ap} TS f1: {test_f1}'
@@ -141,4 +139,4 @@ class NeutralAD_trainer:
         avg_time_per_epoch = float(time_per_epoch.mean())
         elapsed = format_time(avg_time_per_epoch)
 
-        return val_loss, val_auc, test_auc, test_ap,test_f1
+        return val_loss, val_auc, test_auc, test_ap,test_f1,score,target

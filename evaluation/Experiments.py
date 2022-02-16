@@ -78,14 +78,14 @@ class runExperiment():
         trainer = trainer_class(model, loss_function=loss_class(self.model_config['loss_temp']),
                          device=self.model_config['device'])
 
-        val_loss,val_auc,test_auc,test_ap,test_f1 = \
+        val_loss,val_auc,test_auc,test_ap,test_f1,scores,labels = \
             trainer.train(train_loader=train_loader,
                       max_epochs=self.model_config['training_epochs'],
                       optimizer=optimizer, scheduler=scheduler,
                       validation_loader=val_loader, test_loader=test_loader, early_stopping=stopper_class,
                       logger=logger)
 
-        return val_auc, test_auc, test_ap,test_f1
+        return val_auc, test_auc, test_ap,test_f1,scores,labels
 
 class runTextExperiment():
 
@@ -119,7 +119,7 @@ class runTextExperiment():
         trainer = trainer_class(model, loss_function=loss_class(self.model_config['loss_temp']),
                          device=self.model_config['device'])
 
-        val_loss,val_auc,test_auc,test_ap,test_f1 = \
+        val_loss,val_auc,test_auc,test_ap,test_f1,scores,labels = \
             trainer.train(train_loader=train_loader,
                       max_epochs=self.model_config['training_epochs'],
                       optimizer=optimizer, scheduler=scheduler,
@@ -127,7 +127,7 @@ class runTextExperiment():
                       logger=logger)
 
 
-        return val_auc, test_auc, test_ap,test_f1
+        return val_auc, test_auc, test_ap,test_f1,scores,labels
 
 from torch_geometric.data import DataLoader as Graph_DataLoader
 class runGraphExperiment():
@@ -172,13 +172,12 @@ class runGraphExperiment():
         else:
             scheduler = None
 
-        val_loss,val_auc,test_auc,test_ap,test_f1 = \
+        val_loss,val_auc,test_auc,test_ap,test_f1,scores,labels = \
             trainer.train(train_loader=train_loader,cls = cls,
                       max_epochs=self.model_config['training_epochs'],
                       optimizer=optimizer, scheduler=scheduler,
                       validation_loader=val_loader, test_loader=test_loader, early_stopping=stopper_class,
                       logger=logger)
 
-
-        return val_auc, test_auc, test_ap,test_f1
+        return val_auc, test_auc, test_ap,test_f1,scores,labels
 

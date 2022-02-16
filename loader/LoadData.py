@@ -104,6 +104,7 @@ def load_data(data_name,cls,cls_type):
         dataset = Reuters_Dataset(cls,data_path)
         return dataset
     else:
+        # time series datasets
         data_path = path + data_name + '/'
         train = np.load(data_path + 'train_array.npy')
         train_label = np.load(data_path + 'train_label.npy')

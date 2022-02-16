@@ -43,10 +43,8 @@ class DCL(nn.Module):
         if eval:
             score = loss_tensor.sum(1)
             return score
-
         else:
             loss = loss_tensor.sum(1)
-
             return loss
 
 class EucDCL(nn.Module):

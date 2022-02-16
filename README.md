@@ -11,9 +11,10 @@ above paper when reporting, reproducing or extending the results.
 This software is a research prototype, solely developed for and published as
 part of the publication cited above. It will neither be maintained nor monitored in any way.
 
-## How to use
+## Reproduce the Results
 
 This repo contains the code of experiments with NeuTraLAD on various data types including time series data (one-vs-rest setting), tabular data, image data (one-vs-rest setting), text data (one-vs-rest setting), and graph data (one-vs-rest setting). 
+
 Please run the command and replace \$# with available options (see below): 
 
 ```
@@ -44,17 +45,26 @@ python Launch_Exps.py --config-file $1 --dataset-name $2
 
 > Graph Data: dd; thyroid; nci1; mutag; imdb; reddit;
 
+## How to Use
+1. When using your own data, please put your data files under [DATA](DATA).
+2. Create a config file which contains your hyper-parameters under [config_files](config_files).  
+3. Add your data loader to the function ''load_data'' in the [loader/LoadData.py](loader/LoadData.py).
+* For time series data, the shape is (batch size, #channels, sequence length).
+* For image data, the shape is (batch size, #channels, height, width).
+* For tabular data/features from pre-trained model, the shape is (batch size, feature dim).
+
 ## Datasets
 
-Time series datasets are modified on the UEA datasets from https://www.timeseriesclassification.com/
+* Time series datasets are downloaded from the UEA datasets from https://www.timeseriesclassification.com/.
+The processed data of NATOPS, Epilepsy, and Racket_Sports are available under [DATA](DATA). 
 
-Arrhythmia and Thyroid datasets are taken from https://github.com/lironber/GOAD 
+* Arrhythmia and Thyroid datasets are downloaded from https://github.com/lironber/GOAD. Please put the data under [DATA](DATA).  
 
-KDD and KDDrev datasets can be downloaded from https://kdd.ics.uci.edu/databases/kddcup99/
+* KDD and KDDrev datasets are downloaded from https://kdd.ics.uci.edu/databases/kddcup99/. Please put the data under [DATA](DATA).  
 
-Graph Data are modified on the TUDataset from https://chrsmrrs.github.io/datasets/
+* Graph Data are downloaded from TUDataset https://chrsmrrs.github.io/datasets/. Please put the data under [DATA](DATA).  
 
-Cifar10_feat is the last-layer features of Cifar 10 extracted by a ResNet152 pretrained on ImageNet.
+* Cifar10_feat is the last-layer features of Cifar 10 extracted by a ResNet152 pretrained on ImageNet. [Extract_img_features.py](Extract_img_features.py) is used to extract features.
 ## License
 
 Neural Transformation Learning for Anomaly Detection (NeuTraLAD) is open-sourced under the AGPL-3.0 license. See the

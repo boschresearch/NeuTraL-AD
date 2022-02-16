@@ -46,7 +46,6 @@ class KVariantEval:
             try:
                 config_filename = os.path.join(self._NESTED_FOLDER, str(i)+self._FOLD_BASE,
                                                self._RESULTS_FILENAME)
-
                 with open(config_filename, 'r') as fp:
                     variant_scores = json.load(fp)
                     ts_f1 = np.array(variant_scores['TS_F1'])
@@ -114,6 +113,7 @@ class KVariantEval:
 
         val_auc_list, test_auc_list,test_ap_list,test_f1_list = [], [],[], []
         num_repeat = best_config['num_repeat']
+        saved_results = {}
         # Mitigate bad random initializations
         for i in range(num_repeat):
             torch.cuda.empty_cache()
@@ -125,14 +125,18 @@ class KVariantEval:
             torch.cuda.manual_seed(i + 41)
             torch.cuda.manual_seed_all(i + 41)
             dataset = load_data(self.data_name, cls, cls_type)
-            val_auc, test_auc, test_ap,test_f1 = experiment.run_test(dataset,logger)
+            val_auc, test_auc, test_ap,test_f1,scores,labels = experiment.run_test(dataset,logger)
             print(f'Final training run {i + 1}: {val_auc}, {test_auc,test_ap, test_f1}')
-
+            saved_results['scores_'+str(i)] = scores.tolist()
+            saved_results['labels_' + str(i)] = labels.tolist()
             val_auc_list.append(val_auc)
             test_auc_list.append(test_auc)
             test_ap_list.append(test_ap)
             test_f1_list.append(test_f1)
-
+        if best_config['save_scores']:
+            save_path = os.path.join(self._NESTED_FOLDER, str(cls)+self._FOLD_BASE,'scores_labels.json')
+            json.dump(saved_results, open(save_path, 'w'))
+            # saved_results = json.load(open(save_path))
         if logger is not None:
             logger.log(
                 'End of Variant:'+cls_type+ str(cls) + ' TS f1: ' + str(test_f1_list)+' TS AP: ' + str(test_ap_list)+' TS auc: ' + str(test_auc_list) )

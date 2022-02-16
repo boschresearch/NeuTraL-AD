@@ -49,7 +49,6 @@ class KFoldEval:
                 try:
                     config_filename = os.path.join(self._NESTED_FOLDER, self._FOLD_BASE + str(i),
                                                    str(normal_cls)+self._RESULTS_FILENAME)
-
                     with open(config_filename, 'r') as fp:
                         variant_scores = json.load(fp)
 
@@ -65,31 +64,25 @@ class KFoldEval:
 
             results['avg_VAL_auc_' + str(normal_cls)] = Fold_VAL_aucs.mean()
             results['std_VAL_auc_' + str(normal_cls)] = Fold_VAL_aucs.std()
-
             results['avg_TS_auc_' + str(normal_cls)] = Fold_TS_aucs.mean()
             results['std_TS_auc_' + str(normal_cls)] = Fold_TS_aucs.std()
             results['avg_TS_f1_' + str(normal_cls)] = Fold_TS_f1s.mean()
             results['std_TS_f1_' + str(normal_cls)] = Fold_TS_f1s.std()
 
-
             VAL_aucs.append(Fold_VAL_aucs)
             TS_aucs.append(Fold_TS_aucs)
             TS_f1s.append(Fold_TS_f1s)
-
 
         VAL_aucs = np.array(VAL_aucs)
         TS_aucs = np.array(TS_aucs)
         TS_f1s = np.array(TS_f1s)
 
-
         avg_VAL_auc = np.mean(VAL_aucs,0)
         avg_TS_auc = np.mean(TS_aucs,0)
         avg_TS_f1 = np.mean(TS_f1s,0)
 
-
         results['avg_VAL_auc'] = avg_VAL_auc.mean()
         results['std_VAL_auc'] = avg_VAL_auc.std()
-
         results['avg_TS_auc'] = avg_TS_auc.mean()
         results['std_TS_auc'] = avg_TS_auc.std()
         results['avg_TS_f1'] = avg_TS_f1.mean()
@@ -127,6 +120,7 @@ class KFoldEval:
 
                 val_auc_list,test_auc_list,test_f1_list = [], [],[]
                 num_repeat = self.model_configs[0]['num_repeat']
+                saved_results = {}
                 # Mitigate bad random initializations
                 for i in range(num_repeat):
                     torch.backends.cudnn.deterministic = True
@@ -141,8 +135,10 @@ class KFoldEval:
                     train_data, val_data = dataset.get_model_selection_fold(fold_k,cls)
                     test_data = dataset.get_test_fold(fold_k)
 
-                    val_auc, test_auc, test_ap,test_f1= experiment.run_test([train_data,val_data,test_data],cls, logger)
+                    val_auc, test_auc, test_ap,test_f1,scores,labels= experiment.run_test([train_data,val_data,test_data],cls, logger)
                     print(f'Final training run {i + 1}, val auc:{val_auc},test auc:{test_auc}, test f1:{test_f1}')
+                    saved_results['scores_' + str(i)] = scores.tolist()
+                    saved_results['labels_' + str(i)] = labels.tolist()
 
                     val_auc_list.append(val_auc)
                     test_auc_list.append(test_auc)
@@ -151,7 +147,10 @@ class KFoldEval:
                 val_auc = sum(val_auc_list) / num_repeat
                 test_auc = sum(test_auc_list) / num_repeat
                 test_f1 = sum(test_f1_list) / num_repeat
-
+                if best_config['save_scores']:
+                    save_path = os.path.join(self._NESTED_FOLDER, self._FOLD_BASE + str(fold_k),
+                                                   str(cls)+'scores_labels.json')
+                    json.dump(saved_results, open(save_path, 'w'))
                 logger.log('End of Outer fold. Normal cls:'+str(cls)+' VAL auc: ' + str(val_auc)
                            +' TS auc: ' + str(test_auc) + ' TS f1: ' + str(test_f1))
 

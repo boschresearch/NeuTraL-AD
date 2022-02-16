@@ -54,11 +54,9 @@ class MLP(nn.Module):
         super(MLP, self).__init__()
         self.lin1 = Linear(in_dim, hidden, bias=bias)
         self.lin2 = Linear(hidden, out_dim, bias=bias)
-        # self.lin3 = Linear(hidden, out_dim, bias=bias)
 
     def forward(self, z):
         z = self.lin2(F.relu(self.lin1(z)))
-        # return self.lin3(F.relu(z))
         return z
     def reset_parameters(self):
         self.lin1.reset_parameters()

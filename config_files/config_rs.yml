@@ -51,8 +51,9 @@ early_stopper:
 
 shuffle:
   - True
-
 num_repeat:
   - 1
+save_scores:
+  - False
 result_folder:
   - RESULTS/RESULTS_

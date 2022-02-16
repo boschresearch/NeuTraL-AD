@@ -11,7 +11,7 @@ batch_size:
 learning_rate:
   - 0.001
 training_epochs:
-  - 200
+  - 20
 latent_dim:
   - 24
 enc_hdim:
@@ -55,5 +55,7 @@ shuffle:
   - True
 num_repeat:
   - 3
+save_scores:
+  - True
 result_folder:
   - RESULTS/RESULTS_

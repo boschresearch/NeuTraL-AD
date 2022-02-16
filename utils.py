@@ -70,8 +70,6 @@ class Logger:
         if self.lock:
             self.lock.release()
 
-
-
 def format_time(avg_time):
     avg_time = timedelta(seconds=avg_time)
     total_seconds = int(avg_time.total_seconds())
@@ -96,11 +94,11 @@ def compute_pre_recall_f1(target, score):
 
 class EarlyStopper:
 
-    def stop(self, epoch, val_loss, val_auc=None,  test_loss=None, test_auc=None, test_ap=None,test_f1=None, train_loss=None):
+    def stop(self, epoch, val_loss, val_auc=None,  test_loss=None, test_auc=None, test_ap=None,test_f1=None, train_loss=None,score=None,target=None):
         raise NotImplementedError("Implement this method!")
 
     def get_best_vl_metrics(self):
-        return  self.train_loss, self.val_loss,self.val_auc,self.test_loss,self.test_auc,self.test_ap,self.test_f1, self.best_epoch
+        return  self.train_loss, self.val_loss,self.val_auc,self.test_loss,self.test_auc,self.test_ap,self.test_f1, self.best_epoch,self.score,self.target
 
 class Patience(EarlyStopper):
 
@@ -118,8 +116,9 @@ class Patience(EarlyStopper):
         self.train_loss= None
         self.val_loss, self.val_auc, = None, None
         self.test_loss, self.test_auc,self.test_ap,self.test_f1 = None, None,None, None
+        self.score, self.target = None, None
 
-    def stop(self, epoch, val_loss, val_auc=None, test_loss=None, test_auc=None, test_ap=None,test_f1=None,train_loss=None):
+    def stop(self, epoch, val_loss, val_auc=None, test_loss=None, test_auc=None, test_ap=None,test_f1=None,train_loss=None,score=None,target=None):
         if self.use_train_loss:
             if train_loss <= self.local_val_optimum:
                 self.counter = 0
@@ -129,6 +128,7 @@ class Patience(EarlyStopper):
                 self.val_loss, self.val_auc= val_loss, val_auc
                 self.test_loss, self.test_auc, self.test_ap,self.test_f1\
                     = test_loss, test_auc, test_ap,test_f1
+                self.score, self.target = score,target
                 return False
             else:
                 self.counter += 1
@@ -142,6 +142,7 @@ class Patience(EarlyStopper):
                 self.val_loss, self.val_auc = val_loss, val_auc
                 self.test_loss, self.test_auc, self.test_ap,self.test_f1\
                     = test_loss, test_auc, test_ap,test_f1
+                self.score, self.target = score, target
                 return False
             else:
                 self.counter += 1

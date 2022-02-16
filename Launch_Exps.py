@@ -22,8 +22,8 @@ from evaluation.Kfolds_Eval import KFoldEval
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config-file', dest='config_file', default='config_cifar10_feat.yml')
-    parser.add_argument('--dataset-name', dest='dataset_name', default='cifar10_feat')
+    parser.add_argument('--config-file', dest='config_file', default='config_thyroid.yml')
+    parser.add_argument('--dataset-name', dest='dataset_name', default='thyroid')
     return parser.parse_args()
 
 def EndtoEnd_Experiments(config_file, dataset_name):
