@@ -11,7 +11,7 @@ batch_size:
 learning_rate:
   - 0.001
 training_epochs:
-  - 20
+  - 200
 latent_dim:
   - 24
 enc_hdim:
