@@ -19,6 +19,9 @@
 # licensed under GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007,
 # cf. 3rd-party-licenses.txt file in the root directory of this source tree.
 
+# The modifications include adjusting the arguments in the class 'Config'.
+# The date of modifications: January, 2021
+
 from torch.optim import Adam
 from torch.optim.lr_scheduler import StepLR
 from utils import Patience

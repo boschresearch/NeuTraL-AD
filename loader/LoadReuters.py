@@ -19,6 +19,9 @@
 # licensed under MIT License
 # cf. 3rd-party-licenses.txt file in the root directory of this source tree.
 
+# The modifications include adjusting the class 'Reuters_Dataset'.
+# The date of modifications: April, 2021
+
 from .torchnlp_dataset import TorchnlpDataset
 from torchnlp.datasets.dataset import Dataset
 from torchnlp.encoders.text import SpacyEncoder

@@ -19,6 +19,8 @@
 # licensed under GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007,
 # cf. 3rd-party-licenses.txt file in the root directory of this source tree.
 
+# The modifications include adjusting the functions under the class 'DatasetManager'.
+# The date of modifications: April, 2021
 
 from pathlib import Path
 from torch_geometric.datasets import TUDataset

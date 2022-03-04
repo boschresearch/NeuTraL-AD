@@ -19,6 +19,9 @@
 # licensed under GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007,
 # cf. 3rd-party-licenses.txt file in the root directory of this source tree.
 
+# The modifications include adding the function 'compute_pre_recall_f1', adjusting the arguments in the class 'EarlyStopper' and 'Patience'.
+# The date of modifications: January, 2021
+
 from pathlib import Path
 import json
 import yaml
