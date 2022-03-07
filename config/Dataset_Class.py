@@ -60,12 +60,13 @@ class reuters():
     num_cls =7
 
 # graph datasets
+
 from loader.GraphDataClass import TUDatasetManager
 class NCI1(TUDatasetManager):
     data_name = "NCI1"
     num_cls = 2
-class Mutagenicity(TUDatasetManager):
-    data_name = "Mutagenicity"
+class AIDS(TUDatasetManager):
+    data_name = "AIDS"
     num_cls = 2
 class RedditBinary(TUDatasetManager):
     data_name = "REDDIT-BINARY"

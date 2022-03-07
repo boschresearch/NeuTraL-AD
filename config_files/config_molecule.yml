@@ -23,7 +23,7 @@ bias:
 loss:
   - EucDCL
 loss_temp:
-  - 1
+  - 2
 l2:
   - 0.0001
 aggregation:

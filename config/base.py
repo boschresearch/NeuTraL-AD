@@ -58,7 +58,7 @@ class Config:
         'dd': DD,
         'imdb': IMDBBinary,
         'reddit': RedditBinary,
-        'Mutag': Mutagenicity,
+        'aids': AIDS,
     }
 
     models = {
