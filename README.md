@@ -44,7 +44,7 @@ python Launch_Exps.py --config-file $1 --dataset-name $2
 
 * Text Data: reuters;
 
-* Graph Data: dd; thyroid; nci1; aids; imdb; reddit;
+* Graph Data: dd; proteins; nci1; aids; imdb; reddit;
 
 ## How to Use
 1. When using your own data, please put your data files under [DATA](DATA).
