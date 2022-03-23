@@ -1,0 +1,60 @@
+model:
+  - featNTL
+trainer:
+  - NTL
+network:
+  - featNTL
+device:
+  - cuda
+batch_size:
+  - 500
+learning_rate:
+  - 0.0002
+training_epochs:
+  - 40
+enc_zdim:
+  - 256
+enc_nlayers:
+  - 2
+num_trans:
+  - 15
+trans_nlayers:
+  - 3
+trans_hdim:
+  - 2048
+trans_type:
+  - mul
+loss:
+  - DCL
+enc_bias:
+  - False
+batch_norm:
+  - False
+loss_temp:
+  - 0.1
+l2:
+  - 0.
+optimizer:
+  - Adam
+scheduler:
+  -
+    class: StepLR
+    args:
+      step_size: 20
+      gamma: 0.5
+early_stopper:
+  -
+    class: Patience
+    args:
+      patience: 10
+      use_train_loss: True
+
+shuffle:
+  - True
+
+num_repeat:
+  - 3
+save_scores:
+  - False
+result_folder:
+  - RESULTS/RESULTS_
