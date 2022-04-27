@@ -1,6 +1,6 @@
 # Neural Transformation Learning for Anomaly Detection (NeuTraLAD)
 
-This is the companion code for a PyTorch implementation of Neural Transformation Learning reported in the paper
+This is the official code for a PyTorch implementation of Neural Transformation Learning reported in the paper
 **Neural Transformation Learning for Deep Anomaly Detection Beyond Images** by Chen Qiu et al. 
 The paper is published in ICML 2021 and can be found here https://arxiv.org/abs/2103.16440. 
 The code allows the users to reproduce and extend the results reported in the study. Please cite the
