@@ -60,6 +60,19 @@ The processed data of NATOPS, Epilepsy, and Racket_Sports are available under [D
 * KDD and KDDrev datasets are downloaded from https://kdd.ics.uci.edu/databases/kddcup99/. Please put the data under [DATA](DATA).  
 
 * Cifar10_feat is the last-layer features of Cifar 10 extracted by a ResNet152 pretrained on ImageNet. [Extract_img_features.py](Extract_img_features.py) is used to extract features.
+
+## Citation
+If you use this work please cite
+```
+@inproceedings{qiu2021neural,
+  title={Neural transformation learning for deep anomaly detection beyond images},
+  author={Qiu, Chen and Pfrommer, Timo and Kloft, Marius and Mandt, Stephan and Rudolph, Maja},
+  booktitle={International Conference on Machine Learning},
+  pages={8703--8714},
+  year={2021},
+  organization={PMLR}
+}
+```
 ## License
 
 Neural Transformation Learning for Anomaly Detection (NeuTraLAD) is open-sourced under the AGPL-3.0 license. See the
